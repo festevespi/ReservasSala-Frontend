@@ -27,11 +27,11 @@ function ReservaEditarForm() {
       setForm({
         localId: r.local?.id || '',
         salaId: r.sala?.id || '',
-        dataInicio: r.dataInicio ? r.dataInicio.slice(0,16) : '',
-        dataFim: r.dataFim ? r.dataFim.slice(0,16) : '',
+        dataInicio: r.data_inicio ? r.data_inicio.slice(0,16) : '',
+        dataFim: r.data_fim ? r.data_fim.slice(0,16) : '',
         responsavel: r.responsavel || '',
-        cafe: r.cafe || false,
-        quantidadePessoas: r.quantidadePessoas || 0,
+        cafe: r.servir_cafe || false,
+        quantidadePessoas: r.quantidade_pessoas || 0,
         descricao: r.descricao || ''
       });
     });
@@ -52,11 +52,11 @@ function ReservaEditarForm() {
       const reserva = {
         local: locais.find(l => l.id === Number(form.localId)),
         sala: salas.find(s => s.id === Number(form.salaId)),
-        dataInicio: form.dataInicio,
-        dataFim: form.dataFim,
+        data_inicio: form.dataInicio,
+        data_fim: form.dataFim,
         responsavel: form.responsavel,
-        cafe: form.cafe,
-        quantidadePessoas: form.cafe ? Number(form.quantidadePessoas) : 0,
+        servir_cafe: form.cafe,
+        quantidade_pessoas: form.cafe ? Number(form.quantidadePessoas) : 0,
         descricao: form.descricao
       };
       const res = await api.put(`/reservas/${id}`, reserva);
@@ -71,30 +71,54 @@ function ReservaEditarForm() {
   };
 
   return (
-    <div>
+    <div className="container mt-4">
       <h2>Editar Reserva</h2>
-      <form onSubmit={handleSubmit}>
-        <select name="localId" value={form.localId} onChange={handleChange} required>
-          <option value="">Selecione o local</option>
-          {locais.map(l => <option key={l.id} value={l.id}>{l.nome}</option>)}
-        </select>
-        <select name="salaId" value={form.salaId} onChange={handleChange} required>
-          <option value="">Selecione a sala</option>
-          {salas.map(s => <option key={s.id} value={s.id}>{s.nome}</option>)}
-        </select>
-        <input type="datetime-local" name="dataInicio" value={form.dataInicio} onChange={handleChange} required />
-        <input type="datetime-local" name="dataFim" value={form.dataFim} onChange={handleChange} required />
-        <input type="text" name="responsavel" value={form.responsavel} onChange={handleChange} placeholder="Responsável" required />
-        <label>
-          <input type="checkbox" name="cafe" checked={form.cafe} onChange={handleChange} />
-          Café?
-        </label>
-        {form.cafe && (
-          <input type="number" name="quantidadePessoas" value={form.quantidadePessoas} onChange={handleChange} placeholder="Quantidade de pessoas" min="1" />
-        )}
-        <textarea name="descricao" value={form.descricao} onChange={handleChange} placeholder="Descrição" />
-        <button type="submit">Salvar</button>
-        <button type="button" onClick={() => navigate('/')}>Cancelar</button>
+      <form className="row g-3" onSubmit={handleSubmit}>
+        <div className="col-md-6">
+          <label className="form-label">Local</label>
+          <select className="form-select" name="localId" value={form.localId} onChange={handleChange} required>
+            <option value="">Selecione o local</option>
+            {locais.map(l => <option key={l.id} value={l.id}>{l.nome}</option>)}
+          </select>
+        </div>
+        <div className="col-md-6">
+          <label className="form-label">Sala</label>
+          <select className="form-select" name="salaId" value={form.salaId} onChange={handleChange} required>
+            <option value="">Selecione a sala</option>
+            {salas.map(s => <option key={s.id} value={s.id}>{s.nome}</option>)}
+          </select>
+        </div>
+        <div className="col-md-6">
+          <label className="form-label">Data Início</label>
+          <input className="form-control" type="datetime-local" name="dataInicio" value={form.dataInicio} onChange={handleChange} required />
+        </div>
+        <div className="col-md-6">
+          <label className="form-label">Data Fim</label>
+          <input className="form-control" type="datetime-local" name="dataFim" value={form.dataFim} onChange={handleChange} required />
+        </div>
+        <div className="col-md-6">
+          <label className="form-label">Responsável</label>
+          <input className="form-control" type="text" name="responsavel" value={form.responsavel} onChange={handleChange} placeholder="Responsável" required />
+        </div>
+        <div className="col-md-2">
+          <div className='mt-4'></div>
+          <input className="form-check-input" type="checkbox" name="cafe" checked={form.cafe} onChange={handleChange} />
+          <label className="form-check-label">&nbsp;Café?</label>
+        </div>
+        <div className="col-md-4">
+          <div className='mt-4'></div>
+           {form.cafe && (
+            <input className="form-control" type="number" name="quantidadePessoas" value={form.quantidadePessoas} onChange={handleChange} placeholder="Quantidade de pessoas" min="1" />
+          )}
+        </div>
+        <div className="col-12">
+          <label className="form-label">Descrição</label>
+          <textarea className="form-control" name="descricao" value={form.descricao} onChange={handleChange} placeholder="Descrição" />
+        </div>
+        <div className="col-12">
+          <button className="btn btn-success me-2" type="submit">Salvar</button>
+          <button className="btn btn-secondary" type="button" onClick={() => navigate('/')}>Cancelar</button>
+        </div>
       </form>
       {erros.length > 0 && (
         <ul>

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { format } from 'date-fns';
 import api from '../services/api';
 
 function ReservasListagem() {
@@ -43,8 +45,8 @@ function ReservasListagem() {
             <tr key={r.id}>
               <td>{r.sala.nome}</td>
               <td>{r.local.nome}</td>
-              <td>{r.dataInicio}</td>
-              <td>{r.dataFim}</td>
+              <td>{format(new Date(r.data_inicio), 'dd/MM/yyyy HH:mm')}</td>
+              <td>{format(new Date(r.data_fim), 'dd/MM/yyyy HH:mm')}</td>
               <td>{r.responsavel}</td>
               <td>
                 <button className="btn btn-warning btn-sm me-2" onClick={() => navigate(`/reservas/editar/${r.id}`)}>Editar</button>
